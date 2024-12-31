@@ -1,5 +1,7 @@
-FROM oven/bun:latest
+FROM node:22-alpine
 
 WORKDIR /app
 
-CMD ["bash", "-c", "bun dev"]
+COPY ./package.json /app
+
+RUN npm install

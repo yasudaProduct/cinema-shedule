@@ -1,12 +1,15 @@
 services:
   app:
-    build: .
-    container_name: app
+    build:
+      context: .
     ports:
-      - 3000:3000
-    volumes:
-      - ./:/app
+      - "3000:3000"
     tty: true
+    volumes:
+      - .:/app
+    environment:
+      - WATCHPACK_POLLING=true
+    command: npm run dev
   db:
     image: postgres:12-alpine
     container_name: postgres-cinema-shedule
