@@ -15,17 +15,17 @@ export default function SelectedMovies({ movies, onRemove }: SelectedMoviesProps
 
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>選択した映画</CardTitle>
+      <CardHeader className="pb-2">
+        <CardTitle className="text-lg">選択した映画</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-3">
         {movies.map((movie) => (
-          <div key={movie.id} className="flex items-center justify-between">
+          <div key={movie.id} className="flex items-center justify-between text-sm">
             <div>
               <div className="font-medium">{movie.title}</div>
-              <div className="text-sm text-gray-600">{movie.theater.name} - {movie.startTime}</div>
+              <div className="text-xs text-gray-600">{movie.theater.name} - {movie.startTime}</div>
             </div>
-            <Button variant="ghost" size="icon" onClick={() => onRemove(movie.id)}>
+            <Button variant="ghost" size="sm" onClick={() => onRemove(movie.id)}>
               <X className="w-4 h-4 text-red-500" />
             </Button>
           </div>

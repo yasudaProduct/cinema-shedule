@@ -29,23 +29,23 @@ export default function Home() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-4">
-      <div className="text-center py-8">
-        <Film className="w-12 h-12 mx-auto text-indigo-600 mb-4" />
-        <h1 className="text-2xl font-bold mb-2">映画マラソンプランナー</h1>
-        <p className="text-gray-600">
+    <div className="max-w-md mx-auto px-4">
+      <div className="text-center py-6">
+        <Film className="w-10 h-10 mx-auto text-indigo-600 mb-3" />
+        <h1 className="text-xl font-bold mb-2">映画マラソンプランナー</h1>
+        <p className="text-sm text-gray-600">
           上映中の映画から選んで、最適な映画マラソンプランを作成しましょう
         </p>
       </div>
 
-      <div className="flex gap-4 mb-8">
+      <div className="space-y-4 mb-6">
         <Input
           type="search"
           placeholder="映画を検索..."
-          className="max-w-xl"
+          className="w-full"
         />
         <Select>
-          <SelectTrigger className="w-[180px]">
+          <SelectTrigger className="w-full">
             <SelectValue placeholder="すべての映画館" />
           </SelectTrigger>
           <SelectContent>
@@ -59,7 +59,7 @@ export default function Home() {
         </Select>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+      <div className="space-y-4 mb-6">
         {moviesWithTheaters.map((movie) => (
           <MovieCard
             key={movie.id}
@@ -70,7 +70,7 @@ export default function Home() {
         ))}
       </div>
 
-      <div className="space-y-8">
+      <div className="space-y-6">
         <SelectedMovies
           movies={selectedMovies}
           onRemove={handleRemoveMovie}
