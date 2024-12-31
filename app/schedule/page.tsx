@@ -1,10 +1,12 @@
 'use client'
 
+import { useState } from 'react'
 import { useMovieContext } from '@/context/MovieContext'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Clock, MapPin } from 'lucide-react'
 import Link from 'next/link'
+import { SelectedMoviesList } from '@/components/selected-movies-list'
 import { MovieWithTheater } from '@/types/movie'
 
 function calculateTimeDifference(movie1: MovieWithTheater, movie2: MovieWithTheater): number {
@@ -17,16 +19,40 @@ function calculateTimeDifference(movie1: MovieWithTheater, movie2: MovieWithThea
 
 export default function SchedulePage() {
   const { selectedMovies } = useMovieContext()
+  const [moviesInSchedule, setMoviesInSchedule] = useState<Set<string>>(
+    new Set(selectedMovies.map(movie => movie.id))
+  )
 
-  const sortedMovies = [...selectedMovies].sort((a, b) => {
-    const [hoursA, minutesA] = a.startTime.split(':').map(Number)
-    const [hoursB, minutesB] = b.startTime.split(':').map(Number)
-    return hoursA * 60 + minutesA - (hoursB * 60 + minutesB)
-  })
+  const toggleMovieInSchedule = (movieId: string) => {
+    setMoviesInSchedule(prevState => {
+      const newState = new Set(prevState)
+      if (newState.has(movieId)) {
+        newState.delete(movieId)
+      } else {
+        newState.add(movieId)
+      }
+      return newState
+    })
+  }
+
+  const sortedMovies = [...selectedMovies]
+    .filter(movie => moviesInSchedule.has(movie.id))
+    .sort((a, b) => {
+      const [hoursA, minutesA] = a.startTime.split(':').map(Number)
+      const [hoursB, minutesB] = b.startTime.split(':').map(Number)
+      return hoursA * 60 + minutesA - (hoursB * 60 + minutesB)
+    })
 
   return (
-    <div className="max-w-md mx-auto">
+    <div className="max-w-md mx-auto space-y-6">
       <h1 className="text-2xl font-bold mb-4">スケジュール</h1>
+      
+      <SelectedMoviesList 
+        movies={selectedMovies} 
+        toggleMovieInSchedule={toggleMovieInSchedule}
+        moviesInSchedule={moviesInSchedule}
+      />
+
       {selectedMovies.length === 0 ? (
         <Card>
           <CardContent className="pt-6">
@@ -34,6 +60,12 @@ export default function SchedulePage() {
             <Link href="/movies">
               <Button className="w-full">映画を選択する</Button>
             </Link>
+          </CardContent>
+        </Card>
+      ) : sortedMovies.length === 0 ? (
+        <Card>
+          <CardContent className="pt-6">
+            <p className="text-center mb-4">スケジュールに含める映画を選択してください。</p>
           </CardContent>
         </Card>
       ) : (

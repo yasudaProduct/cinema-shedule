@@ -70,4 +70,3 @@ export default function OptimizedSchedule({ movies }: OptimizedScheduleProps) {
     </Card>
   )
 }
-
