@@ -11,14 +11,23 @@ import {
 } from "@/components/ui/select"
 import MovieCard from "@/components/movie-card"
 import SelectedMovies from "@/components/selected-movies"
-import { getAllMoviesWithTheaters, theaters } from '@/data/mock'
 import { useMovieContext } from '@/context/MovieContext'
+import { useMovies } from '@/hooks/useMovies'
+import { theaters } from '@/data/mock'
 
 export default function MoviesPage() {
-  const [movies] = useState(getAllMoviesWithTheaters())
+  const { movies, loading, error } = useMovies()
   const { selectedMovies, addMovie, removeMovie } = useMovieContext()
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedTheater, setSelectedTheater] = useState('all')
+
+  if (loading) {
+    return <div>Loading...</div>
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>
+  }
 
   const filteredMovies = movies.filter((movie) => {
     const matchesSearch = movie.title.toLowerCase().includes(searchQuery.toLowerCase())
