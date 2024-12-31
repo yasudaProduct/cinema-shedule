@@ -12,21 +12,13 @@ import {
 import MovieCard from "@/components/movie-card"
 import SelectedMovies from "@/components/selected-movies"
 import { getAllMoviesWithTheaters, theaters } from '@/data/mock'
-import { MovieWithTheater } from '@/types/movie'
+import { useMovieContext } from '@/context/MovieContext'
 
 export default function MoviesPage() {
-  const [movies, setMovies] = useState(getAllMoviesWithTheaters())
-  const [selectedMovies, setSelectedMovies] = useState<MovieWithTheater[]>([])
+  const [movies] = useState(getAllMoviesWithTheaters())
+  const { selectedMovies, addMovie, removeMovie } = useMovieContext()
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedTheater, setSelectedTheater] = useState('all')
-
-  const handleAddMovie = (movie: MovieWithTheater) => {
-    setSelectedMovies((prev) => [...prev, movie])
-  }
-
-  const handleRemoveMovie = (movieId: string) => {
-    setSelectedMovies((prev) => prev.filter((m) => m.id !== movieId))
-  }
 
   const filteredMovies = movies.filter((movie) => {
     const matchesSearch = movie.title.toLowerCase().includes(searchQuery.toLowerCase())
@@ -65,7 +57,7 @@ export default function MoviesPage() {
           <MovieCard
             key={movie.id}
             movie={movie}
-            onAdd={() => handleAddMovie(movie)}
+            onAdd={() => addMovie(movie)}
             isSelected={selectedMovies.some((m) => m.id === movie.id)}
           />
         ))}
@@ -73,7 +65,7 @@ export default function MoviesPage() {
 
       <SelectedMovies
         movies={selectedMovies}
-        onRemove={handleRemoveMovie}
+        onRemove={removeMovie}
       />
     </div>
   )

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { FooterMenu } from "@/components/footer-menu";
+import { MovieProvider } from "@/context/MovieContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,10 +29,12 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <main className="container mx-auto p-4">
-          {children}
-        </main>
-        <FooterMenu />
+        <MovieProvider>
+          <main className="container mx-auto p-4">
+            {children}
+          </main>
+          <FooterMenu />
+        </MovieProvider>
       </body>
     </html>
   );
