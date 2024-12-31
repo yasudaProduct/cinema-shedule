@@ -2,8 +2,12 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, Film, Calendar, Settings } from 'lucide-react'
+import { Home, Film, Calendar, Settings, LogIn, LogOut } from 'lucide-react'
 import { useMovieContext } from '@/context/MovieContext'
+import { supabase } from '@/utils/supabase/client'
+import { toast } from 'sonner'
+import { useEffect, useState } from 'react'
+import { Session } from '@supabase/supabase-js'
 
 const menuItems = [
   { icon: Home, label: 'ホーム', href: '/' },
@@ -15,6 +19,32 @@ const menuItems = [
 export function FooterMenu() {
   const pathname = usePathname()
   const { selectedMovies } = useMovieContext()
+  const [session, setSession] = useState<Session | null>(null)
+
+  useEffect(() => {
+    console.log('useEffect')
+    const getSession = async () => {
+      const { data } = await supabase.auth.getSession();
+      setSession(data.session || null);
+    };
+
+    getSession();
+
+    // リアルタイムでセッション変更を監視
+    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
+      setSession(session || null);
+    });
+
+    return () => {
+      authListener?.subscription.unsubscribe();
+    };
+
+  }, []);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut()
+    toast.success("ログアウト成功")
+  }
 
   return (
     <footer className="fixed bottom-0 left-0 right-0 bg-white border-t">
@@ -38,7 +68,25 @@ export function FooterMenu() {
             <span className="text-xs mt-1">{item.label}</span>
           </Link>
         ))}
+        {session ? (
+          <button
+            onClick={handleLogout}
+            className="flex flex-col items-center py-2 px-4 text-gray-600"
+          >
+            <LogOut className="w-6 h-6" />
+            <span className="text-xs mt-1">ログアウト</span>
+          </button>
+        ) : (
+          <Link
+            href="/auth/signin"
+            className="flex flex-col items-center py-2 px-4 text-gray-600"
+          >
+            <LogIn className="w-6 h-6" />
+            <span className="text-xs mt-1">ログイン</span>
+          </Link>
+        )}
       </nav>
     </footer>
   )
 }
+
