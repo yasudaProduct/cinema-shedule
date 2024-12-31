@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { FooterMenu } from "@/components/footer-menu";
 import { MovieProvider } from "@/context/MovieContext";
+import { Toaster } from "@/components/ui/sonner";
+import { SettingsProvider } from "@/context/SettingsContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,12 +31,15 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <MovieProvider>
-          <main className="container mx-auto p-4">
-            {children}
-          </main>
-          <FooterMenu />
-        </MovieProvider>
+        <SettingsProvider>
+          <MovieProvider>
+            <main className="container mx-auto p-4">
+              {children}
+            </main>
+            <Toaster />
+            <FooterMenu />
+          </MovieProvider>
+        </SettingsProvider>
       </body>
     </html>
   );
