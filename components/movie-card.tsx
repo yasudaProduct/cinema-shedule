@@ -43,6 +43,7 @@ export default function MovieCard({
             size="sm" 
             onClick={onAdd}
             disabled={isSelected}
+            variant={isSelected ? "secondary" : "default"}
           >
             {isSelected ? (
               <>

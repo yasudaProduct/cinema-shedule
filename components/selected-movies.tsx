@@ -10,7 +10,16 @@ interface SelectedMoviesProps {
 
 export default function SelectedMovies({ movies, onRemove }: SelectedMoviesProps) {
   if (movies.length === 0) {
-    return null
+    return (
+      <Card>
+        <CardHeader className="pb-2">
+          <CardTitle className="text-lg">選択した映画</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-sm text-gray-600">まだ映画が選択されていません。</p>
+        </CardContent>
+      </Card>
+    )
   }
 
   return (
