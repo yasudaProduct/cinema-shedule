@@ -4,10 +4,6 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Home, Film, Calendar, Settings, LogIn, LogOut } from 'lucide-react'
 import { useMovieContext } from '@/context/MovieContext'
-// import { supabase } from '@/utils/supabase/client'
-// import { toast } from 'sonner'
-// import { useEffect, useState } from 'react'
-// import { Session, User } from '@supabase/supabase-js'
 import useUser from '@/hooks/useUser'
 import { useEffect, useState } from 'react'
 import { User } from '@supabase/supabase-js'
@@ -28,39 +24,6 @@ export function FooterMenu() {
   useEffect(() => {
     setUser(session?.user || null)
   }, [session])
-  // const [session, setSession] = useState<Session | null>(null)
-  // const [user, setUser] = useState<User | null>(null)
-
-  // useEffect(() => {
-  //   console.log('useEffect')
-  //   const getSession = async () => {
-  //     const { data } = await supabase.auth.getSession();
-  //     console.log('data', data)
-  //     console.log('data.session', data.session)
-  //     setSession(data.session || null);
-  //     setUser(data.session?.user || null);
-  //   };
-
-  //   getSession();
-
-  //   // リアルタイムでセッション変更を監視
-  //   const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
-  //     console.log('event', event)
-  //     console.log('session', session)
-  //     setSession(session || null);
-  //     setUser(session?.user || null);
-  //   });
-
-  //   return () => {
-  //     authListener?.subscription.unsubscribe();
-  //   };
-
-  // }, []);
-
-  // const handleLogout = async () => {
-  //   await supabase.auth.signOut()
-  //   toast.success("ログアウト成功")
-  // }
 
   return (
     <footer className="fixed bottom-0 left-0 right-0 bg-white border-t">
@@ -93,13 +56,6 @@ export function FooterMenu() {
             <span className="text-xs mt-1">{user.email}</span>
           </button>
         ) : (
-          // <button
-          //   onClick={() => signIn('yasu.private.ct@gmail.com', 'Yasuword1122')}
-          //   className="flex flex-col items-center py-2 px-4 text-gray-600"
-          // >
-          //   <LogOut className="w-6 h-6" />
-          //   <span className="text-xs mt-1">ログイン</span>
-          // </button>
           <Link
             href="/sign-in"
             className="flex flex-col items-center py-2 px-4 text-gray-600"
